@@ -141,6 +141,29 @@ export default function createApp(options = {}) {
     return movieSummaries;
   });
 
+  app.post('/movies', async (request, reply) => {
+    const newMovie: Movie = request.body as Movie;
+
+    if (!newMovie.title || !newMovie.releaseDate || !Array.isArray(newMovie.genres)) {
+      return reply.status(400);
+    }
+
+    const newId = movies.length > 0 ? Math.max(...movies.map(movie => movie.id)) + 1 : 1;
+
+    const movieToAdd: Movie = {
+      ...newMovie,
+      id: newId,
+      _links: {
+        self: `/movies/${newId}`,
+        actors: `/movies/${newId}/actors`,
+      },
+    };
+
+    movies.push(movieToAdd);
+
+    return reply.status(201).send(movieToAdd);
+  })
+
   app.get('/movies/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
     const movie = movies.find(m => m.id === parseInt(id));
