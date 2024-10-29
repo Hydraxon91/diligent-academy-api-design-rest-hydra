@@ -131,6 +131,19 @@ components:
           type: string
           format: date
           description: release date
+        actors:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Actor'
+        _links:
+          type: object
+          properties:
+            self:
+              type: string
+              description: URL to movie resource
+            actors:
+              type: string
+              description: URL to list of actors in the movie
       required: ["id"]
     
     ActorArrayItem:
