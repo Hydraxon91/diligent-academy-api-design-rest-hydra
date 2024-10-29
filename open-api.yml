@@ -1,12 +1,12 @@
 openapi: 3.0.3
 info:
- title: Movie Database
- version: '1.0'
+  title: Movie Database
+  version: '1.0'
 paths:
   /movies:
     get:
       summary: get movies
-      description: get a list of all movies.
+      description: Retrieve a list of all movies, with optional filters for title and genre.
       parameters:
         - in: query
           name: title
@@ -18,54 +18,61 @@ paths:
             type: string
       responses:
         '200':
-          description: list of movies
+          description: List of movies
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MoviesArrayItem'
+                  $ref: '#/components/schemas/MovieSummary'
     post:
-      summary: create new movie
+      summary: Create a new movie
+      description: Add a new movie to the collection.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MoviesArrayItem'
+              $ref: '#/components/schemas/Movie'
       responses:
         '201':
-          description: movie created successfully
+          description: Movie created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Movie'
+        '400':
+          description: Bad request due to invalid input data
+
   /movies/{id}:
     get:
-      summary: get movie by id
+      summary: Retrieve movie by ID
       parameters:
         - name: id 
           in: path 
           required: true
           schema:
             type: integer
+          description: Unique identifier for the movie.
       responses:
         '200':
-          description: Movie
+          description: Movie details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Movie'
         '404':
           description: Movie not found
+
     put:
-      summary: Update a movie by id
+      summary: Update a movie by ID
       parameters:
         - name: id 
           in: path
           required: true
           schema:
             type: integer
+          description: Unique identifier for the movie.
       requestBody:
         required: true
         content:
@@ -74,7 +81,7 @@ paths:
               $ref: '#/components/schemas/Movie'
       responses:
         '200':
-          description: Movie updated
+          description: Movie updated successfully
           content:
             application/json:
               schema:
@@ -96,10 +103,11 @@ paths:
           description: Movie deleted successfully
         '404':
           description: Movie not found
+
   /actors:
     get:
-      summary: get all actors
-      description: get list of all actors
+      summary: Get all actors
+      description: Retrieve a list of all actors, with an optional filter by name.
       parameters:
         - in: query
           name: name
@@ -107,55 +115,61 @@ paths:
             type: string
       responses:
         '200':
-          description: list of actors
+          description: List of actors
           content:
             application/json:
-               schema: 
+              schema:
                 type: array 
                 items:
-                  $ref: '#/components/schemas/ActorArrayItem'
+                  $ref: '#/components/schemas/ActorSummary'
     post:
-      summary: create new actor
-      description: add actor to the actor list
+      summary: Create a new actor
+      description: Add a new actor to the collection.
       requestBody:
         required: true
         content:
           application/json:
-             schema: 
-              $ref: '#/components/schemas/ActorArrayItem'
+            schema: 
+              $ref: '#/components/schemas/Actor'
       responses:
         '201':
-          description: actor created successfully
+          description: Actor created successfully
           content:
             application/json:
               schema: 
                 $ref: '#/components/schemas/Actor'
+        '400':
+          description: Bad request due to invalid input data
+
   /actors/{id}:
     get:
-      summary: get actor by id
+      summary: Retrieve actor by ID
       parameters:
         - name: id 
           in: path 
           required: true
           schema:
             type: integer
+          description: Unique identifier for the actor.
       responses:
         '200':
-          description: Actor
+          description: Actor details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Actor'
         '404':
           description: Actor not found
+
     put:
-      summary: Update a actor by id
+      summary: Update an actor by ID
       parameters:
         - name: id 
           in: path
           required: true
           schema:
             type: integer
+          description: Unique identifier for the actor.
       requestBody:
         required: true
         content:
@@ -164,15 +178,16 @@ paths:
               $ref: '#/components/schemas/Actor'
       responses:
         '200':
-          description: actor updated
+          description: Actor updated successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Actor'
         '404':
-          description: actor not found
+          description: Actor not found
+
     delete:
-      summary: Delete a actor by ID
+      summary: Delete an actor by ID
       parameters:
         - name: id
           in: path
@@ -182,98 +197,96 @@ paths:
           description: Unique identifier for the actor.
       responses:
         '204':
-          description: actor deleted successfully
+          description: Actor deleted successfully
         '404':
-          description: actor not found  
+          description: Actor not found  
+
 components:
- schemas:
-    MoviesArrayItem:
+  schemas:
+    MovieSummary:
       type: object
       properties:
         id:
           type: integer
-          description: id of the movie.
+          description: Unique identifier for the movie.
         title:
           type: string
-          description: title
+          description: Title of the movie.
 
     Movie:
       type: object
       properties:
         id:
           type: integer
-          description: id of the movie.
+          description: Unique identifier for the movie.
         title:
           type: string
-          description: title
+          description: Title of the movie.
         genres:
           type: array
           items:
             type: string
-          description: genres
+          description: Genres associated with the movie.
         plot:
           type: string
-          description: plot
+          description: Plot summary of the movie.
         releaseDate:
           type: string
           format: date
-          description: release date
+          description: Release date of the movie.
         actors:
           type: array
           items: 
-            $ref: '#/components/schemas/Actor'
+            $ref: '#/components/schemas/ActorSummary'
         _links:
           type: object
           properties:
             self:
               type: string
-              description: URL to movie resource
+              description: URL to this movie resource.
             actors:
               type: string
-              description: URL to list of actors in the movie
-      required: ["id"]
-    
-    ActorArrayItem:
+              description: URL to list of actors in this movie.
+
+    ActorSummary:
       type: object
       properties:
         id:
           type: integer
-          description: id of the actor
+          description: Unique identifier for the actor.
         name:
           type: string
-          description: name of actor
-        height:
-          type: number
-          description: height of the actor
-    Actor: 
+          description: Name of the actor.
+
+    Actor:
       type: object
       properties:
         id:
           type: integer
-          description: id of the actor
+          description: Unique identifier for the actor.
         name:
           type: string
-          description: name of actor
+          description: Name of the actor.
         height:
           type: integer
-          description: height of the actor
-        birthday: 
+          description: Height of the actor in centimeters.
+        birthday:
           type: string
           format: date
-          description: birthday of actor
-        birthplace: 
+          description: Birth date of the actor.
+        birthplace:
           type: string
-          description: birthplace of actor
+          description: Birthplace of the actor.
         movies:
           type: array
           items:
-            $ref: '#/components/schemas/Movie'
+            $ref: '#/components/schemas/MovieSummary'
         _links:
           type: object
           properties:
             self:
               type: string
-              description: URL to actor resource
-            movies: 
+              description: URL to this actor resource.
+            movies:
               type: string
-              description: URL to liust of movies the actor has appeared in
+              description: URL to the list of movies this actor has appeared in.
