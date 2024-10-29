@@ -4,11 +4,16 @@ export interface Movie {
     genres: string[];
     plot: string;
     releaseDate: string;
-    actors?: Actor[];
+    actors?: ActorSummary[];
     _links: {
         self: string;
         actors: string;
     };
+}
+
+export interface MovieSummary {
+    id: number;
+    title: string;
 }
 
 export interface Actor {
@@ -17,9 +22,14 @@ export interface Actor {
     birthday: string;
     birthplace: string;
     height: number;
-    movies?: Movie[];
+    movies?: MovieSummary[];
     _links: {
         self: string;
         movies: string;
     };
+}
+
+export interface ActorSummary {
+    id: number;
+    name: string;
 }
