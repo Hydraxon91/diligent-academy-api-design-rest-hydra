@@ -133,6 +133,42 @@ export default function createApp(options = {}) {
     },
   ];
 
+  app.get('/movies', async (request, reply) => {
+    const movieSummaries: MovieSummary[] = movies.map(movie => ({
+      id: movie.id,
+      title: movie.title,
+    }));
+    return movieSummaries;
+  });
+
+  app.get('/movies/:id', async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const movie = movies.find(m => m.id === parseInt(id));
+
+    if (!movie) {
+      return reply.status(404).send({ message: 'Movie not found' });
+    }
+    return movie;
+  });
+
+  app.get('/actors', async (request, reply) => {
+    const actorSummaries: ActorSummary[] = actors.map(actor => ({
+      id: actor.id,
+      name: actor.name,
+    }));
+    return actorSummaries;
+  });
+
+  app.get('/actors/:id', async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const actor = actors.find(a => a.id === parseInt(id));
+
+    if (!actor) {
+      return reply.status(404).send({ message: 'Actor not found' });
+    }
+    return actor;
+  });
+
   app.get('/hello', async () => {
     return { hello: 'World!' };
   });
