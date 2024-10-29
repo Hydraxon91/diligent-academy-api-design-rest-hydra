@@ -132,3 +132,48 @@ components:
           format: date
           description: release date
       required: ["id"]
+    
+    ActorArrayItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: id of the actor
+        name:
+          type: string
+          description: name of actor
+        height:
+          type: number
+          description: height of the actor
+    Actor: 
+      type: object
+      properties:
+        id:
+          type: integer
+          description: id of the actor
+        name:
+          type: string
+          description: name of actor
+        height:
+          type: integer
+          description: height of the actor
+        birthday: 
+          type: string
+          format: date
+          description: birthday of actor
+        birthplace: 
+          type: string
+          description: birthplace of actor
+        movies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Movie'
+        _links:
+          type: object
+          properties:
+            self:
+              type: string
+              description: URL to actor resource
+            movies: 
+              type: string
+              description: URL to liust of movies the actor has appeared in
