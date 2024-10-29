@@ -215,6 +215,7 @@ components:
 
     Movie:
       type: object
+      required: ["id", "title", "releaseDate"]
       properties:
         id:
           type: integer
@@ -260,6 +261,7 @@ components:
 
     Actor:
       type: object
+      required: ["id", "name", "birthday"]
       properties:
         id:
           type: integer
