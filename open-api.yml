@@ -40,7 +40,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Movie'
-
   /movies/{id}:
     get:
       summary: get movie by id
@@ -97,7 +96,95 @@ paths:
           description: Movie deleted successfully
         '404':
           description: Movie not found
-        
+  /actors:
+    get:
+      summary: get all actors
+      description: get list of all actors
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+      responses:
+        '200':
+          description: list of actors
+          content:
+            application/json:
+               schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/ActorArrayItem'
+    post:
+      summary: create new actor
+      description: add actor to the actor list
+      requestBody:
+        required: true
+        content:
+          application/json:
+             schema: 
+              $ref: '#/components/schemas/ActorArrayItem'
+      responses:
+        '201':
+          description: actor created successfully
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Actor'
+  /actors/{id}:
+    get:
+      summary: get actor by id
+      parameters:
+        - name: id 
+          in: path 
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Actor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+        '404':
+          description: Actor not found
+    put:
+      summary: Update a actor by id
+      parameters:
+        - name: id 
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Actor'
+      responses:
+        '200':
+          description: actor updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+        '404':
+          description: actor not found
+    delete:
+      summary: Delete a actor by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the actor.
+      responses:
+        '204':
+          description: actor deleted successfully
+        '404':
+          description: actor not found  
 components:
  schemas:
     MoviesArrayItem:
