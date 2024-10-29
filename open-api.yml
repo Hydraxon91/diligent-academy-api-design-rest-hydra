@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+ title: Movie Database
+ version: '1.0'
+paths:
+  /movies:
+    get:
+      summary: get movies
+      description: get a list of all movies.
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+        - in: query
+          name: genre
+          schema:
+            type: string
+      responses:
+        '200':
+          description: list of movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MoviesArrayItem'
+    post:
+      summary: create new movie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoviesArrayItem'
+      responses:
+        '201':
+          description: movie created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+
+  /movies/{id}:
+    get:
+      summary: get movie by id
+      parameters:
+        - name: id 
+          in: path 
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: Movie not found
+    put:
+      summary: Update a movie by id
+      parameters:
+        - name: id 
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+      responses:
+        '200':
+          description: Movie updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: Movie not found
+
+    delete:
+      summary: Delete a movie by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the movie.
+      responses:
+        '204':
+          description: Movie deleted successfully
+        '404':
+          description: Movie not found
+        
+components:
+ schemas:
+    MoviesArrayItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: id of the movie.
+        title:
+          type: string
+          description: title
+
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: id of the movie.
+        title:
+          type: string
+          description: title
+        genres:
+          type: array
+          items:
+            type: string
+          description: genres
+        plot:
+          type: string
+          description: plot
+        releaseDate:
+          type: string
+          format: date
+          description: release date
+      required: ["id"]
